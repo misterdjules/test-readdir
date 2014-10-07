@@ -6,8 +6,7 @@
 uv_dir_t    dir_handle;
 uv_dirent_t dir_entry;
 
-static void close_cb(uv_handle_t* handle) {
-  uv_dir_t* dir_handle = (uv_dir_t*)handle;
+static void closedir_cb(uv_fs_t* req) {
 }
 
 static void readdir_cb(uv_fs_t* readdir_req) {
@@ -15,7 +14,7 @@ static void readdir_cb(uv_fs_t* readdir_req) {
   assert(readdir_req->dir_handle == &dir_handle);
 
   if (readdir_req->result == UV_EOF) {
-    uv_close((uv_handle_t*)&dir_handle, close_cb);
+    uv_fs_closedir(uv_default_loop(), readdir_req, &dir_handle, closedir_cb);
   } else {
     printf("%s\n", ((uv_dirent_t*)readdir_req->ptr)->name);
     uv_fs_readdir(uv_default_loop(),
