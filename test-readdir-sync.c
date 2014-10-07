@@ -25,7 +25,5 @@ int main(int argc, char* argv[]) {
 
   uv_close((uv_handle_t*)&dir_handle, NULL);
 
-  //uv_run(uv_default_loop(), UV_RUN_DEFAULT);
-
   return 0;
 }
