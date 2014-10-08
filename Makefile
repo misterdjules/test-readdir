@@ -18,10 +18,19 @@ SCANDIR_OBJECTS = $(subst .c,.o,$(SCANDIR_SOURCES))
 IDLE_SOURCES = test-idle.c
 IDLE_OBJECTS = $(subst .c,.o,$(IDLE_SOURCES))
 
-LIBUV_DIR=/Users/JulienGilli/dev/libuv
+ifndef LIBUV_DIR
+$(error Please set LIBUV_DIR to a directory that contains a version of libuv \
+ that has been built *with autotools*)
+endif
 
-CFLAGS = -I$(LIBUV_DIR)/include -O0 -g -Wall -Wextra
-LDFLAGS = $(LIBUV_DIR)/out/Debug/libuv.a
+CFLAGS=-I $(LIBUV_DIR)/include -O0 -g -Wall -Wextra
+LDFLAGS=$(LIBUV_DIR)/.libs/libuv.a
+
+ifeq ($(uname),SunOS)
+	LDFLAGS += -lkstat -lnsl -lsendfile -lsocket -lpthread
+else ifeq ($(uname),Linux)
+	LDFLAGS += -lpthread -lrt
+endif
 
 all: $(BUILD_DIR) test-readdir test-readdir-sync test-readdir-saghul test-scandir test-idle
 
