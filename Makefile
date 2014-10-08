@@ -1,3 +1,5 @@
+
+PLATFORM=$(shell uname)
 BUILD_DIR=./out
 
 READDIR_SOURCES = test-readdir.c
@@ -26,10 +28,11 @@ endif
 CFLAGS=-I $(LIBUV_DIR)/include -O0 -g -Wall -Wextra
 LDFLAGS=$(LIBUV_DIR)/.libs/libuv.a
 
-ifeq ($(uname),SunOS)
-	LDFLAGS += -lkstat -lnsl -lsendfile -lsocket -lpthread
-else ifeq ($(uname),Linux)
-	LDFLAGS += -lpthread -lrt
+ifeq ($(PLATFORM),SunOS)
+	LDFLAGS+=-lkstat -lnsl -lsendfile -lsocket -lpthread
+endif
+ifeq ($(PLATFORM),Linux)
+	LDFLAGS+=-lpthread -lrt
 endif
 
 all: $(BUILD_DIR) test-readdir test-readdir-sync test-readdir-saghul test-scandir test-idle
