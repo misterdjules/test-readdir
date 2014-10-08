@@ -20,7 +20,13 @@ int main(int argc, char* argv[]) {
                        &dir_handle,
                        &dir_entry,
                        NULL) != UV_EOF) {
-    printf("%s\n", dir_entry.name);
+    printf("%s", dir_entry.name);
+
+    if (dir_entry.type == UV_DIRENT_DIR) {
+      printf("/");
+    }
+
+    printf("\n");
   }
 
   uv_close((uv_handle_t*)&dir_handle, NULL);

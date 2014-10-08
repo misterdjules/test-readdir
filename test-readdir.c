@@ -19,7 +19,12 @@ static void readdir_cb(uv_fs_t* req) {
   if (req->result == UV_EOF) {
     uv_close((uv_handle_t*)&dir_handle, close_cb);
   } else {
-    printf("%s\n", ((uv_dirent_t*)req->ptr)->name);
+    printf("%s", ((uv_dirent_t*)req->ptr)->name);
+    if (((uv_dirent_t*)req->ptr)->type == UV_DIRENT_DIR) {
+      printf("/");
+    }
+
+    printf("\n");
 
     uv_fs_readdir(uv_default_loop(),
                   req,
