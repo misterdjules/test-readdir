@@ -20,13 +20,18 @@ SCANDIR_OBJECTS = $(subst .c,.o,$(SCANDIR_SOURCES))
 IDLE_SOURCES = test-idle.c
 IDLE_OBJECTS = $(subst .c,.o,$(IDLE_SOURCES))
 
+CREATE_DIR_ENTRIES_SOURCES = create-dir-entries.c
+CREATE_DIR_ENTRIES_OBJECTS = $(subst .c,.o,$(CREATE_DIR_ENTRIES_SOURCES))
+
 ifndef LIBUV_DIR
 $(error Please set LIBUV_DIR to a directory that contains a version of libuv \
  that has been built *with autotools*)
 endif
 
-CFLAGS=-I $(LIBUV_DIR)/include -O0 -g -Wall -Wextra
-LDFLAGS=$(LIBUV_DIR)/.libs/libuv.a
+#CFLAGS=-I $(LIBUV_DIR)/include -O0 -g -Wall -Wextra
+CFLAGS=-I $(LIBUV_DIR)/include -O2 -Wall -Wextra
+#LDFLAGS=$(LIBUV_DIR)/.libs/libuv.a
+LDFLAGS=$(LIBUV_DIR)/.libs/libuv.a -O2
 
 ifeq ($(PLATFORM),SunOS)
 	LDFLAGS+=-lkstat -lnsl -lsendfile -lsocket -lpthread
@@ -63,4 +68,7 @@ test-scandir: $(SCANDIR_OBJECTS)
 	$(CC) $? -o $@ $(LDFLAGS)
 
 test-idle: $(IDLE_OBJECTS)
+	$(CC) $? -o $@ $(LDFLAGS)
+
+create-dir-entries: $(CREATE_DIR_ENTRIES_OBJECTS)
 	$(CC) $? -o $@ $(LDFLAGS)

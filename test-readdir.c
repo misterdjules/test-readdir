@@ -26,14 +26,14 @@ static void readdir_cb(uv_fs_t* req) {
 
     printf("\n");
 
+    uv_fs_req_cleanup(req);
+
     uv_fs_readdir(uv_default_loop(),
                   req,
                   &dir_handle,
                   &dir_entry,
                   readdir_cb);
   }
-
-  uv_fs_req_cleanup(req);
 }
 
 static void opendir_cb(uv_fs_t* req) {
