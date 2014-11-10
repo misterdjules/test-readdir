@@ -6,7 +6,6 @@ uv_dirent_t dent;
 
 static void scandir_cb(uv_fs_t* req) {
   if (req) {
-    printf("req->result: %zd\n", req->result);
     while (UV_EOF != uv_fs_scandir_next(req, &dent)) {
       printf("dent: %s\n", dent.name);
     }

@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
   unsigned int dirent_idx;
 
   uv_fs_opendir(uv_default_loop(), &opendir_req, argv[1], NULL);
+  uv_fs_req_cleanup(&opendir_req);
 
   while ((nb_entries_read = uv_fs_readdir(uv_default_loop(),
                                           &readdir_req,
@@ -28,9 +29,12 @@ int main(int argc, char* argv[]) {
     for (dirent_idx = 0; dirent_idx < (unsigned int)nb_entries_read; ++dirent_idx) {
       printf("%s\n", dirents[dirent_idx].name);
     }
+
+    uv_fs_req_cleanup(&readdir_req);
   }
 
   uv_fs_closedir(uv_default_loop(), &closedir_req, &dir, NULL);
+  uv_fs_req_cleanup(&closedir_req);
 
   return 0;
 }
